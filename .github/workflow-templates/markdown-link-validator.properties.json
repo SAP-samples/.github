@@ -1,0 +1,10 @@
+{
+    "name": "SAP Samples Workflow - Check Links in Markdown",
+    "description": "This workflow checks the links in your markdown files for validity. It is using the lychee-action. You can exclude links via a `.lycheeignore` file.",
+    "categories": [
+        "Markdown"
+    ],
+    "filePatterns": [
+        ".*\\.md$"
+    ]
+}
