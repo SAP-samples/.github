@@ -1,0 +1,11 @@
+{
+    "name": "Build and Push Container Images (Node.js)",
+    "description": "This workflow builds a Node.js project, builds and pushes a Container Image to the GitHub Packages.",
+    "categories": [
+        "Continuous integration", "Dockerfile"
+    ],
+    "filePatterns": [
+        "Dockerfile",
+        "package.json"
+    ]
+}
