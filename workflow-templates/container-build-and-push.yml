@@ -1,0 +1,51 @@
+# This workflow builds and publishes a container image from a Dockerfile.
+# It fetches the metadata from the GitHub API.
+# If you publish without package the tagging will be based
+# on the branch name.
+# As an additional step it can send out a Slack message
+
+name: Build and Push Docker Image
+
+on: 
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build_and_push:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile #PUT THE PATH TO YOUR DOCKERFILE HERE
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}          
+      - name: Notify via Slack
+        uses: rtCamp/action-slack-notify@v2.2.0
+        if: ${{ failure() }}
+        env:
+          SLACK_MESSAGE: 'Build Failed for ${{ env.SAMPLE_NAME }}'
+          SLACK_WEBHOOK: ${{ secrets.BUILD_FAIL_NOTIFY_SLACK_URL }} #PUT YOUR SLACK WEBHOOK URL SECRET HERE    

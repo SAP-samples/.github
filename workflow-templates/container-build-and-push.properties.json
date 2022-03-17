@@ -1,0 +1,10 @@
+{
+    "name": "Build and Push Container Images (Vanilla)",
+    "description": "This workflow builds and pushes a Container Image to the GitHub Packages.",
+    "categories": [
+        "Continuous integration", "Dockerfile"
+    ],
+    "filePatterns": [
+        "Dockerfile"
+    ]
+}
